@@ -44,10 +44,10 @@ DESCRIPTION_URL_DICTIONARY = {
      'heavy snow': 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Heavy_Snow%2C_London_N14_-_geograph.org.uk_-_2200728.jpg/480px-Heavy_Snow%2C_London_N14_-_geograph.org.uk_-_2200728.jpg',
      'fog': 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/St_James%27_Church%2C_Wetherby_in_the_mist_%288th_November_2020%29.jpg/480px-St_James%27_Church%2C_Wetherby_in_the_mist_%288th_November_2020%29.jpg',
      'broken clouds': 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Clouds_After_Rain.jpg/480px-Clouds_After_Rain.jpg',
-     'tornado': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/F5_tornado_Elie_Manitoba_2007.jpg/480pxF5_tornado_Elie_Manitoba_2007.jpg',
+     'tornado': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/F5_tornado_Elie_Manitoba_2007.jpg/480px-F5_tornado_Elie_Manitoba_2007.jpg',
      'thunderstorm': 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Lightning_Pritzerbe_01_%28MK%29.jpg/480px-Lightning_Pritzerbe_01_%28MK%29.jpg',
      'light intensity drizzle': 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Light_rain_on_a_roof.jpg/480px-Light_rain_on_a_roof.jpg',
-     'scattered clouds': 'https://upload.wikimedia.org/wikipedia/commons/5/5b/Scattered_clouds.jpg/480px-Scattered_clouds.jpg',
+     'scattered clouds': 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Scattered_clouds.jpg/480px-Scattered_clouds.jpg',
      'thunderstorm with drizzle': 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Lightning_Pritzerbe_01_%28MK%29.jpg/480px-Lightning_Pritzerbe_01_%28MK%29.jpg',
      'snow': 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Snow_flurries_over_the_pond_%283282132489%29.jpg/480px-Snow_flurries_over_the_pond_%283282132489%29.jpg',
      'heavy intensity shower rain': 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Heavy_Rain_Approaching_%28152651135%29.jpeg/480px-Heavy_Rain_Approaching_%28152651135%29.jpeg'
