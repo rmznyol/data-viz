@@ -1,12 +1,11 @@
-import math
 import geopandas as gpd
-import pandas as pd
+
 import plotly.express as px
 import shapely.geometry
-import numpy as np
+
 from shapely.affinity import affine_transform as T
 from shapely.affinity import rotate as R
-import data_processor
+from data_processor import dataprocessor
 
 # some geometry for an arrow
 a = shapely.wkt.loads(
@@ -18,39 +17,12 @@ gdf = (
     .set_crs("EPSG:4326")
 )
 
+
 class PlotMaker():
-    def __init__(self, date, data):
-        """
-        data_format is as follows
-            lat	    lon	        d	        s
-    0	45.523449	-122.676208	1.396263	0.3
-    1	37.774929	-122.419418	0.000000	0.2
-    2	47.606209	-122.332069	5.585054	0.5
-    3	34.052231	-118.243683	0.000000	0.2
-    4	32.715328	-117.157257	5.759587	0.5
-        """
-        self.date = date   
-        self.df_wind = pd.DataFrame(
-        {"lat": data['locations']['Latitude'].values,
-         "lon": data['locations']['Longitude'].values,
-         "d": data['wind_direction'].loc[data['wind_direction']['datetime'] == self.date, 'Portland':'Boston'].values[0]*(np.pi/180),
-         "s": data['wind_speed'].loc[data['wind_speed']['datetime'] == self.date, 'Portland':'Boston'].values[0] / 10,
-         'temperature': data['temp_in_F'].loc[data['temp_in_F']['datetime'] == self.date, 'Portland':'Boston'].values[0]
-         }
-        )
+    def __init__(self, data):
 
-
-    def plot_maker(self):
-
-        t = (
-            px.scatter_mapbox(self.df_wind, lat="lat", lon="lon")
-            .data
-        )
-
-        # wind direction and strength
-        fig = px.choropleth_mapbox(
-        self.df_wind,
-        geojson=gpd.GeoSeries(
+        self.df_wind = data
+        self.geojson = gpd.GeoSeries(
             self.df_wind.loc[:, ["lat", "lon", "d", "s"]].apply(
                 lambda r: R(
                     T(a, [r["s"], 0, 0, r["s"], r["lon"], r["lat"]]),
@@ -60,20 +32,41 @@ class PlotMaker():
                 ),
                 axis=1,
             )
-        ).__geo_interface__,
-        center = {"lat": 37.0902, "lon": -95.7129},
-        locations=self.df_wind.index,
-        color="temperature",
-        range_color = [0,100],
-        color_continuous_scale= 'icefire',
+        ).__geo_interface__
+
+    def plot_maker(self):
+        """
+        needed data_format is as follows
+       lat         lon         d         s  temperature
+0   45.523449 -122.676208  3.985168  0.262500    61.879625
+1   37.774929 -122.419418  1.941679  0.237500    75.072500
+2   47.606209 -122.332069  1.705332  0.158333    58.413125
+3   34.052231 -118.243683  1.106102  0.054167    78.815375
+4   32.715328 -117.157257  2.490730  0.108333    76.781750
+5   36.174969 -115.137222  2.756166  0.125000    81.845375
+6   33.448380 -112.074043  2.231113  0.125000    85.760750
+        """
+        t = (
+            px.scatter_mapbox(self.df_wind, lat="lat", lon="lon")
+            .data
+        )
+
+        # wind direction and strength
+        fig = px.choropleth_mapbox(
+            self.df_wind,
+            geojson=self.geojson,
+            center={"lat": 37.0902, "lon": -95.7129},
+            locations=self.df_wind.index,
+            color="temperature",
+            range_color=[0, 100],
+            color_continuous_scale='icefire',
         ).add_traces(t).update_layout(mapbox={"style": "carto-darkmatter", "zoom": 3},
-                                       margin={"l":0,"r":0,"t":0,"b":0})
-        
+                                      margin={"l": 0, "r": 0, "t": 0, "b": 0})
+
         return fig
 
+
 if __name__ == '__main__':
-    data = data_processor.DataProcessor().get_data()
-    PlotMaker('2014-04-01 00:00:00',data).plot_maker().show()
+    from datetime import date
 
-
-
+    PlotMaker(dataprocessor.get_organized_wind_data_in_time(date(2014, 9, 5), 'not hourly')).plot_maker().show()
