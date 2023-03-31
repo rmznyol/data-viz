@@ -64,6 +64,7 @@ class PlotMaker():
         center = {"lat": 37.0902, "lon": -95.7129},
         locations=self.df_wind.index,
         color="temperature",
+        range_color = [0,100],
         color_continuous_scale= 'icefire',
         ).add_traces(t).update_layout(mapbox={"style": "carto-darkmatter", "zoom": 3},
                                        margin={"l":0,"r":0,"t":0,"b":0})
@@ -76,76 +77,3 @@ if __name__ == '__main__':
 
 
 
-
-### WORKING EXAMPLE ###
-# import data_processor
-# import plot_maker
-# from dash import Dash, dcc, html, Input, Output, no_update
-
-# data = data_processor.DataProcessor().get_data()
-
-# choices={
-#         0: '2014-01-01 00:00:00',
-#         1: '2014-04-01 00:00:00',
-#         2: '2014-07-01 00:00:00',
-#         3: '2014-10-01 00:00:00'
-#     }
-
-# app = JupyterDash(__name__)
-
-# ## Setting the layout
-# app.layout = html.Div(children=[
-#     dcc.Slider(0, 3, 1, value=0, marks=choices, id='date-select'),
-#     dcc.Graph(id='plot', clear_on_unhover=True),
-#     dcc.Tooltip(id="graph-tooltip")
-# ]
-# )
-
-# ## setting the callback
-# @app.callback(
-#        Output('plot', 'figure'),
-#        Input('date-select', 'value'),
-# )
-# def update_figure(date):
-#     fig = plot_maker.PlotMaker(choices[date],data).plot_maker() 
-#     fig.update_traces(hoverinfo="none", hovertemplate=None)
-
-#     return fig
-
-# @app.callback(
-#         Output("graph-tooltip", "show"),
-#         Output("graph-tooltip", "bbox"),
-#         Output("graph-tooltip", "children"),
-#         Input('plot', "hoverData")
-# )
-# def update_hover(hoverData): 
-    
-#     if hoverData is None:
-#         return False, no_update, no_update
-    
-#     pt = hoverData["points"][0]
-#     bbox = pt["bbox"]
-#     num = pt["pointNumber"]
-
-#     df_row = 'image_row'
-#     img_src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Noru_2017-07-31_0415Z.jpg/450px-Noru_2017-07-31_0415Z.jpg'
-#     name = 'city'
-#     form = 'type of weather'
-#     desc = 'desc'
-#     if len(desc) > 300:
-#         desc = desc[:100] + '...'
-
-#     children = [
-#         html.Div([
-#             html.Img(src=img_src, style={"width": "100%"}),
-#             html.H2(f"{name}", style={"color": "darkblue", "overflow-wrap": "break-word"}),
-#             html.P(f"{form}"),
-#             html.P(f"{desc}"),
-#         ], style={'width': '200px', 'white-space': 'normal'})
-#     ]
-
-#     return True, bbox, children
-
-# ## Runs the app
-# ## Note you must change the port from the earlier port values
-# app.run_server(mode='inline', port = 8061)
