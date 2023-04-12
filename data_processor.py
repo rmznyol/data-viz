@@ -40,24 +40,35 @@ class DataProcessor:
         # temperature
         # fills missing data with latest non-missing value
         self.tmp = self.df_dct['temp'].fillna(method='ffill')
-        self.tmp['datetime'] = pd.to_datetime(self.tmp['datetime'])
+        self.tmp = self._convert_time_zone(self.tmp)
 
         self.temp_in_F = self._convert_temp_to_F(self.tmp)
 
         self.wind_direction = self.df_dct['wd'].fillna(method='ffill')
-        self.wind_direction['datetime'] = pd.to_datetime(
-            self.wind_direction['datetime'])
+        self.wind_direction = self._convert_time_zone(self.wind_direction)
 
         self.wind_speed = self.df_dct['ws'].fillna(method='ffill')
-        self.wind_speed['datetime'] = pd.to_datetime(
-            self.wind_speed['datetime'])
+        self.wind_speed = self._convert_time_zone(self.wind_speed)
 
         self.weather_description = self.df_dct['descr'].fillna(method='ffill')
-        self.weather_description['datetime'] = pd.to_datetime(
-            self.weather_description['datetime'])
+        self.weather_description = self._convert_time_zone(self.weather_description)
 
         self.latitudes = self.locations.Latitude
         self.longitudes = self.locations.Longitude
+    
+    @staticmethod
+    def _convert_time_zone(df, initial_timezone='Israel', final_timezone='US/Eastern'):
+        """
+        converting timezone in dataframes
+        :param df: df with datetime column in string format
+        :param initial_timezone: initial timezone of the column
+        :param final_timezone: timezone to be converted
+        :return df: returns new df with desired timezone
+        """
+        df['datetime'] = pd.to_datetime(df['datetime']).dt.tz_localize(tz=initial_timezone, ambiguous='NaT', nonexistent='NaT')
+        #df['datetime'].dropna(inplace=True)
+        df['datetime'] = df['datetime'].dt.tz_convert(final_timezone).dt.tz_localize(None)
+        return df
 
     # Converts Temperature from Kelvin to Farenheit
     def _convert_temp_to_F(self, df):
@@ -65,7 +76,7 @@ class DataProcessor:
         df = 9 / 5 * (df.loc[:, self.US_cities].copy() - 273) + 32
         df['datetime'] = datetime
         return df
-
+    
     def get_data(self):
         return {'locations': self.locations,
                 'temp_in_F': self.temp_in_F,
@@ -103,9 +114,11 @@ class DataProcessor:
             self.longitudes == lon)].City.values[0]
         city_temp = self._date_data_picker(
             self.temp_in_F, datetime, datatype, [city])[0]
-        city_desc = self._date_data_picker(self.weather_description, datetime, datatype, [city], not_description=False)[
-            0]
-        return city, city_temp, city_desc
+        city_wind_speed = self._date_data_picker(
+            self.wind_speed, datetime, datatype, [city])[0]
+        city_desc = self._date_data_picker(
+            self.weather_description, datetime, datatype, [city], not_description=False)[0]
+        return city, city_temp, city_desc, city_wind_speed
 
 
 dataprocessor = DataProcessor()
