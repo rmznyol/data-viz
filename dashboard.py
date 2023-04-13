@@ -169,6 +169,5 @@ def update_hover(hoverData, date, time, datatype):
     return True, bbox, children
 
 
-app.run_server(
-    # mode='inline',
-    port=8062)
+if __name__ == '__main__':
+    app.run_server(debug=True)
