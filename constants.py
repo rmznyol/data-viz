@@ -1,3 +1,4 @@
+# Pictures for each weather description
 DESCRIPTION_URL_DICTIONARY = {
     'few clouds': 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Partly_Cloudy_%2814207954735%29.jpg/480px-Partly_Cloudy_%2814207954735%29.jpg',
      'heavy intensity rain': 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Heavy_Rain_001.jpg/480px-Heavy_Rain_001.jpg',

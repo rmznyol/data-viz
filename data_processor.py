@@ -77,6 +77,7 @@ class DataProcessor:
         df['datetime'] = datetime
         return df
     
+    # Returns a dictionary of weather dataframes
     def get_data(self):
         return {'locations': self.locations,
                 'temp_in_F': self.temp_in_F,
@@ -85,6 +86,7 @@ class DataProcessor:
                 'weather_description': self.weather_description
                 }
 
+    #returns correct data (hourly vs daily) based on chosen timeframe
     @staticmethod
     def _date_data_picker(df, datetime, datatype, city_list, not_description=True):
         if datatype == 'hourly':
@@ -97,6 +99,7 @@ class DataProcessor:
             else:
                 return df_of_the_day.mode(axis='index').iloc[0].values
 
+    # Creates a dataframe of data to make arrows
     def get_organized_wind_data_in_time(self, date, datatype):
 
         df_wind = pd.DataFrame(
@@ -108,7 +111,8 @@ class DataProcessor:
              }
         )
         return df_wind
-
+    
+    # Returns data displayed on hover
     def get_hover_data_in_time(self, lat, lon, datetime, datatype):
         city = self.locations[(self.latitudes == lat) | (
             self.longitudes == lon)].City.values[0]
@@ -127,6 +131,7 @@ if __name__ == '__main__':
     # for data in DataProcessor().get_data().values():
     #     print(data)
     from datetime import date
+
 
     # t = DataProcessor().get_data()['wind_speed'].iloc[3].datetime
     # print(t, type(t))
