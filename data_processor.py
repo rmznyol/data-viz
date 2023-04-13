@@ -6,12 +6,10 @@ class DataProcessor:
 
     def __init__(self):
         # List the names of the individual files from the WeatherData folder
-        self.file_names = ["city_attributes.csv", "temperature.csv", "wind_speed.csv",
-                           "humidity.csv", "weather_description.csv", "pressure.csv", "wind_direction.csv"]
+        self.file_names = ["city_attributes.csv", "temperature.csv", "wind_speed.csv", "weather_description.csv", "wind_direction.csv"]
 
         # List the names of the data frames to be imported
-        self.df_names = ['city data', 'temp',
-                         'ws', 'humid', 'descr', 'press', 'wd']
+        self.df_names = ['city data', 'temp', 'ws', 'descr', 'wd']
 
         # put the (file_name, df_name) in a dictionary
         self.name_dct = {k: v for k, v in zip(self.file_names, self.df_names)}
@@ -20,7 +18,7 @@ class DataProcessor:
         self.df_dct = {}
 
         for k in self.name_dct:
-            self.df_dct[self.name_dct[k]] = pd.read_csv("WeatherData/" + k)
+            self.df_dct[self.name_dct[k]] = pd.read_csv('https://raw.githubusercontent.com/rmznyol/data-viz/April_13/WeatherData/' + k)
 
         # extract only the data for US cities: Includes datetime feature!
         self.cities = self.df_dct['city data']
@@ -77,7 +75,6 @@ class DataProcessor:
         df['datetime'] = datetime
         return df
     
-    # Returns a dictionary of weather dataframes
     def get_data(self):
         return {'locations': self.locations,
                 'temp_in_F': self.temp_in_F,
@@ -86,7 +83,6 @@ class DataProcessor:
                 'weather_description': self.weather_description
                 }
 
-    #returns correct data (hourly vs daily) based on chosen timeframe
     @staticmethod
     def _date_data_picker(df, datetime, datatype, city_list, not_description=True):
         if datatype == 'hourly':
@@ -99,7 +95,6 @@ class DataProcessor:
             else:
                 return df_of_the_day.mode(axis='index').iloc[0].values
 
-    # Creates a dataframe of data to make arrows
     def get_organized_wind_data_in_time(self, date, datatype):
 
         df_wind = pd.DataFrame(
@@ -111,8 +106,7 @@ class DataProcessor:
              }
         )
         return df_wind
-    
-    # Returns data displayed on hover
+
     def get_hover_data_in_time(self, lat, lon, datetime, datatype):
         city = self.locations[(self.latitudes == lat) | (
             self.longitudes == lon)].City.values[0]
@@ -131,7 +125,6 @@ if __name__ == '__main__':
     # for data in DataProcessor().get_data().values():
     #     print(data)
     from datetime import date
-
 
     # t = DataProcessor().get_data()['wind_speed'].iloc[3].datetime
     # print(t, type(t))
