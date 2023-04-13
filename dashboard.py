@@ -9,6 +9,7 @@ from US_time import ComputeUSTime
 
 
 app = Dash(__name__)
+server = app.server
 
 # Sets up the layout with all interfaces
 app.layout = html.Div([
