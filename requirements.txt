@@ -1,6 +1,6 @@
 dash==2.9.1
 pandas
 gunicorn
-geopandas==0.12.2
+geopandas
 shapely
 numpy
