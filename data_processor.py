@@ -18,7 +18,7 @@ class DataProcessor:
         self.df_dct = {}
 
         for k in self.name_dct:
-            self.df_dct[self.name_dct[k]] = pd.read_csv('https://raw.githubusercontent.com/rmznyol/data-viz/April_13/WeatherData/' + k)
+            self.df_dct[self.name_dct[k]] = pd.read_csv('https://raw.githubusercontent.com/rmznyol/data-viz/main/WeatherData/' + k)
 
         # extract only the data for US cities: Includes datetime feature!
         self.cities = self.df_dct['city data']
