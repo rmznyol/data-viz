@@ -11,23 +11,22 @@ from US_time import ComputeUSTime
 app = Dash(__name__)
 server = app.server
 
-# Sets up the layout with all interfaces
 app.layout = html.Div([
-    html.H2(children="Interactive U.S. Weather Description", style={'textAlign': 'center'}),
-    html.H3(children="Nov. 2012-Oct. 2017", style={'textAlign': 'center'}),
-    html.P('Displays weather data for cities across the US at selected dates or times.', style={'textAlign': 'center'}),
+    html.H2(children= "Interactive U.S. Weather Description", style={'textAlign':'center'}),
+    html.H3(children= "Nov. 2012-Oct. 2017", style={'textAlign':'center'}),
+    html.P('Displays weather data for cities across the US at selected dates or times.',style={'textAlign':'center'}),
     html.Div(
-        html.Ul([html.Li('Calendar: select central day'),
-                 html.Li('Radio items: hourly data or daily averages'),
-                 html.Li('Slider: given chosen day, select hour or day in vicinity'),
-                 html.Li('Arrow direction: wind direction'),
-                 html.Li('Arrow size: wind speed'),
-                 html.Li('Arrow color: temperature'),
-                 html.Li('Hover: view temperature, description, and wind speed for city')],
-                style={'display': 'inline-block', 'textAlign': 'left'}
-                ),
-        style={'textAlign': "center"}
-    ),
+    html.Ul([html.Li('Arrow direction: wind direction'),
+            html.Li('Arrow size: wind speed'),
+            html.Li('Arrow color: temperature'),
+            html.Li('Calendar: select central day'),
+            html.Li('Radio items: hourly data or daily averages'),
+            html.Li('Slider: given chosen day, select hour or day in vicinity'),
+            html.Li('Hover: view temperature, weather description with picture, and wind speed for city')],
+            style={'display': 'inline-block', 'textAlign':'left'}
+            ),
+            style={'textAlign': "center"}
+            ),
     # Calendar and radio items
     html.Div([dcc.DatePickerSingle(id='date-picker-single',
                                    min_date_allowed=date(2012, 11, 1),
@@ -52,17 +51,16 @@ app.layout = html.Div([
     # Hour slider
     html.Div(id='slider_container', children=[dcc.Slider(0, 23, 1, id='time-select',
                                                          marks={
-                                                             val: ComputeUSTime(val).compute_US_time() for val in
-                                                             range(24)},
+                                                             val: ComputeUSTime(val).compute_US_time() for val in range(24)},
                                                          value=12)]),
     # Day slider
     html.Div(id='slider_container_days',
              children=[
                  html.Div([
-                     html.P(children='day(s)', style={'float': 'right', 'fontSize': 14, 'margin-top': '-15px'}),
-                     html.P(children='day(s)', style={'float': 'left', 'fontSize': 14, 'margin-top': '-15px'})],
+                     html.P(children= 'day(s)', style={'float': 'right','fontSize': 14,'margin-top':'-15px'}),
+                     html.P(children= 'day(s)',style={'float': 'left','fontSize': 14,'margin-top':'-15px'})],
                      className='row'),
-                 dcc.Slider(-15, 15, 1, id='date-select', value=0, included=False),
+                 dcc.Slider(-15, 15, 1, id='date-select',value=0,included=False),
              ],
              ),
     # Graph
@@ -85,15 +83,13 @@ def set_cities_options(option):
 
 @app.callback(
     Output('slider_container_days', 'style'),
-    Output('date-select', 'marks'),
+    Output('date-select','marks'),
     Input('data_type', 'value'),
     Input('date-picker-single', 'date'))
-def update_date_day_slider(option, date):
+def update_date_day_slider(option,date):
     date = '2015-08-25' if date == None else date
     if option != 'hourly':
-        marks = {val: ({'label': f'{val:+}'} if val != 0 else {'label': date, 'style': {'color': '#f50', 'fontSize': 16,
-                                                                                        'margin-top': '-35px'}}) for val
-                 in range(-15, 16)}
+        marks = {val: ({'label':f'{val:+}'} if val !=0 else {'label': date, 'style': {'color': '#f50','fontSize': 16,'margin-top':'-35px'}}) for val in range(-15,16)}
         return {'display': 'block'}, marks
     else:
         return {'display': 'none'}, None
@@ -115,6 +111,8 @@ def update_figure(date, time, date_delta, datatype):
         datetime_datetime = pd.to_datetime(datetime_datetime)
     else:
         datetime_datetime = datetime.fromisoformat(date).date() + timedelta(days=date_delta)
+
+
 
     data_in_time = dataprocessor.get_organized_wind_data_in_time(
         datetime_datetime, datatype)
@@ -159,7 +157,7 @@ def update_hover(hoverData, date, time, datatype):
         html.Div([
             html.Img(src=img_src, style={"width": "100%"}),
             html.H2(f"{city}", style={"color": "darkblue",
-                                      "overflow-wrap": "break-word"}),
+                    "overflow-wrap": "break-word"}),
             html.P(f"{temp:.1f}"u'\N{DEGREE SIGN}F'),
             html.P(f'{desc}'),
             html.P(f"{speed:.1f} m/s"),
@@ -167,7 +165,6 @@ def update_hover(hoverData, date, time, datatype):
     ]
 
     return True, bbox, children
-
 
 if __name__ == '__main__':
     app.run_server(debug=True)
